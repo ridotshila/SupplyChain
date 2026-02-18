@@ -3,123 +3,35 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Supply Chain dApp</title>
-  <script type="module" src="supplychain.js"></script>
+  <title>Guestbook dApp</title>
+  <script type="module" src="guestbook.js"></script>
   <style>
     body { font-family: 'Inter', sans-serif; background: #f0f2f5; color: #1a1a1a; margin:0; padding:0;}
     header { background:#1f2937; color:white; padding:1rem; text-align:center; font-size:1.5rem; }
-    main { max-width: 900px; margin: 2rem auto; background:white; padding:2rem; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1);}
+    main { max-width: 700px; margin: 2rem auto; background:white; padding:2rem; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1);}
     h2 { margin-top:2rem; }
     label { display:block; margin-top:1rem; font-weight:600; }
-    input, select { width: 100%; padding:0.6rem; margin-top:0.2rem; border-radius:6px; border:1px solid #ccc; }
+    input, textarea { width: 100%; padding:0.6rem; margin-top:0.2rem; border-radius:6px; border:1px solid #ccc; }
     button { margin-top:1rem; padding:0.7rem 1.2rem; background:#2563eb; color:white; border:none; border-radius:6px; cursor:pointer; font-weight:600; transition:0.2s;}
     button:hover { background:#1d4ed8; }
-    .section { margin-bottom:2rem; border-bottom:1px solid #e5e7eb; padding-bottom:1rem; }
-    #log, #output, #onChainData { margin-top:1rem; padding:0.8rem; background:#e5e7eb; border-radius:6px; font-family:monospace; min-height:40px; white-space:pre-line; }
-    .button-group { display:flex; gap:1rem; flex-wrap:wrap; margin-top:0.5rem;}
+    #log, #messages { margin-top:1rem; padding:0.8rem; background:#e5e7eb; border-radius:6px; font-family:monospace; min-height:40px; white-space:pre-line; }
   </style>
 </head>
 <body>
-  <h1>Supply Chain Provenance dApp</h1>
+  <header>Guestbook dApp</header>
+  <main>
+    <button id="connect">Connect Wallet (Lace)</button>
+    <pre id="log">No activity yet...</pre>
 
-  <!-- Wallet -->
-  <button id="connect">Connect Wallet (Lace)</button>
-  <pre id="log">No activity yet...</pre>
+    <h2>Sign the Guestbook</h2>
+    <label>Your Message</label>
+    <textarea id="message" placeholder="Enter a short message"></textarea>
+    <button id="sign">Submit Message</button>
 
-  <hr>
-
-  <!-- Generate PKHs for testing -->
-  <h2>Generate Test PKHs</h2>
-  <button id="generatePKHs">Generate PKHs</button>
-  <pre id="output">PKHs will appear here...</pre>
-
-  <hr>
-
-  <!-- Create Batch -->
-  <h2>Create Batch</h2>
-  <label>Batch Hash</label>
-  <input id="batchHash" placeholder="Enter batch hash" />
-
-  <label>Bond (ADA)</label>
-  <input id="bond" type="number" placeholder="Bond amount" />
-
-  <label>Transporter PKH</label>
-  <input id="transporter" placeholder="hex" />
-
-  <label>Warehouse PKH</label>
-  <input id="warehouse" placeholder="hex" />
-
-  <label>Retailer PKH</label>
-  <input id="retailer" placeholder="hex" />
-
-  <label>Verifier PKH</label>
-  <input id="verifier" placeholder="hex" />
-
-  <button id="create">Create Batch</button>
-
-  <hr>
-
-  <!-- Advance State -->
-  <h2>Advance Batch State</h2>
-  <button id="toTransit">To In Transit</button>
-  <button id="toWarehouse">To Warehoused</button>
-  <button id="toDelivered">To Delivered</button>
-
-  <hr>
-
-  <!-- Finalize -->
-  <h2>Finalize Batch</h2>
-  <button id="verify">Verify</button>
-  <button id="reject">Reject</button>
-
-  <hr>
-
-  <!-- Public Verification -->
-  <h2>Public On-Chain Verification</h2>
-  <button id="publicVerify">View Batches</button>
-  <pre id="onChainData"></pre>
-
-  <script type="module">
-    import { Lucid, Blockfrost } from "https://unpkg.com/lucid-cardano@0.10.11/web/mod.js";
-
-    const BLOCKFROST_URL = "https://cardano-preprod.blockfrost.io/api/v0";
-    const BLOCKFROST_KEY = "preprodYjRkHfcazNkL0xxG9C2RdUbUoTrG7wip";
-
-    let lucid;
-    let walletAddress;
-
-    // Connect wallet (reuse from your supplychain.js if needed)
-    document.getElementById("connect").onclick = async () => {
-      if (!window.cardano?.lace) { alert("Lace wallet not found"); return; }
-      const api = await window.cardano.lace.enable();
-      lucid = await Lucid.new(new Blockfrost(BLOCKFROST_URL, BLOCKFROST_KEY), "Preprod");
-      lucid.selectWallet(api);
-      walletAddress = await lucid.wallet.address();
-      document.getElementById("log").textContent = `✅ Wallet connected\nAddress: ${walletAddress}`;
-    };
-
-    // Generate PKHs for Transporter, Warehouse, Retailer, Verifier
-    document.getElementById("generatePKHs").onclick = async () => {
-      if (!lucid) { alert("Connect wallet first"); return; }
-
-      // For simplicity, we generate PKHs from the **same wallet**
-      const details = lucid.utils.getAddressDetails(walletAddress);
-      const pkh = details.paymentCredential.hash;
-
-      document.getElementById("output").textContent = `
-✅ Using connected wallet for all roles:
-Transporter PKH: ${pkh}
-Warehouse PKH:   ${pkh}
-Retailer PKH:    ${pkh}
-Verifier PKH:    ${pkh}
-      `;
-
-      // Fill input fields automatically
-      document.getElementById("transporter").value = pkh;
-      document.getElementById("warehouse").value = pkh;
-      document.getElementById("retailer").value = pkh;
-      document.getElementById("verifier").value = pkh;
-    };
-  </script>
+    <h2>Messages on-chain</h2>
+    <button id="refresh">Refresh Messages</button>
+    <pre id="messages">No messages yet...</pre>
+  </main>
 </body>
 </html>
+
