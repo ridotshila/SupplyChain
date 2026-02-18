@@ -2,7 +2,7 @@ import { Lucid, Blockfrost, Data, Constr } from "https://unpkg.com/lucid-cardano
 
 /* ================= CONFIG ================= */
 const BLOCKFROST_URL = "https://cardano-preprod.blockfrost.io/api/v0";
-const BLOCKFROST_KEY = "YOUR_BLOCKFROST_KEY";
+const BLOCKFROST_KEY = "preprodYjRkHfcazNkL0xxG9C2RdUbUoTrG7wip";
 const NETWORK = "Preprod";
 
 /* ================= SCRIPT ================= */
