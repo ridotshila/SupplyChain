@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Supply Chain dApp</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; background: #f0f2f5; color: #1a1a1a; margin:0; padding:0;}
+    header { background:#1f2937; color:white; padding:1rem; text-align:center; font-size:1.5rem; }
+    main { max-width: 900px; margin: 2rem auto; background:white; padding:2rem; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1);}
+    h2 { margin-top:2rem; }
+    label { display:block; margin-top:1rem; font-weight:600; }
+    input, select { width: 100%; padding:0.6rem; margin-top:0.2rem; border-radius:6px; border:1px solid #ccc; }
+    button { margin-top:1rem; padding:0.7rem 1.2rem; background:#2563eb; color:white; border:none; border-radius:6px; cursor:pointer; font-weight:600; transition:0.2s;}
+    button:hover { background:#1d4ed8; }
+    .section { margin-bottom:2rem; border-bottom:1px solid #e5e7eb; padding-bottom:1rem; }
+    #log { margin-top:1rem; padding:0.8rem; background:#e5e7eb; border-radius:6px; font-family:monospace; min-height:40px; white-space:pre-line; }
+    .button-group { display:flex; gap:1rem; flex-wrap:wrap; margin-top:0.5rem;}
+  </style>
+</head>
+<body>
+  <header>Supply Chain Provenance dApp</header>
+  <main>
+
+    <!-- WALLET CONNECTION -->
+    <div class="section">
+      <h2>Wallet</h2>
+      <button id="connect">Connect Wallet (Lace)</button>
+      <div id="walletAddress"></div>
+      <div id="scriptAddress"></div>
+    </div>
+
+    <!-- CREATE BATCH -->
+    <div class="section">
+      <h2>Create Batch</h2>
+      <label for="batchHash">Batch Hash (Hex)</label>
+      <input id="batchHash" placeholder="Enter batch hash"/>
+
+      <label for="bond">Bond (ADA)</label>
+      <input id="bond" type="number" placeholder="e.g., 5"/>
+
+      <label for="transporter">Transporter PubKey Hash</label>
+      <input id="transporter" placeholder="hex"/>
+
+      <label for="warehouse">Warehouse PubKey Hash</label>
+      <input id="warehouse" placeholder="hex"/>
+
+      <label for="retailer">Retailer PubKey Hash</label>
+      <input id="retailer" placeholder="hex"/>
+
+      <label for="verifier">Verifier PubKey Hash</label>
+      <input id="verifier" placeholder="hex"/>
+
+      <button id="create">Create Batch</button>
+    </div>
+
+    <!-- ADVANCE STATE -->
+    <div class="section">
+      <h2>Advance Batch State</h2>
+      <div class="button-group">
+        <button id="toTransit">To In Transit</button>
+        <button id="toWarehouse">To Warehoused</button>
+        <button id="toDelivered">To Delivered</button>
+      </div>
+    </div>
+
+    <!-- FINALIZE -->
+    <div class="section">
+      <h2>Finalize Batch</h2>
+      <div class="button-group">
+        <button id="verify">Verify</button>
+        <button id="reject">Reject</button>
+      </div>
+    </div>
+
+    <!-- PUBLIC VERIFICATION -->
+    <div class="section">
+      <h2>Public On-Chain Verification</h2>
+      <button id="publicVerify">View All Batches</button>
+      <pre id="onChainData"></pre>
+    </div>
+
+    <!-- LOG -->
+    <div class="section">
+      <h2>Logs</h2>
+      <div id="log">No activity yet...</div>
+    </div>
+
+  </main>
+
+  <script type="module" src="supplychain.js"></script>
+</body>
+</html>
